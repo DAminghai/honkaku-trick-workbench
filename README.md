@@ -1,3 +1,4 @@
+<img width="3827" height="1871" alt="Overview" src="https://github.com/user-attachments/assets/e75eed36-fe07-4eac-ab15-bf3fdd78ea7d" />
 # 诡计拆解工作台
 
 > 给本格推理读者与创作者的本地工具：把读过的书拆成可复用的写作素材，连接跨书的诡计异同，并从"没人组合过的诡计"里找原创灵感。
@@ -18,6 +19,7 @@
 
 <!-- 建议在此处放一张界面截图： -->
 <!-- ![界面预览](docs/screenshot.png) -->
+https://github.com/DAminghai/honkaku-trick-workbench/blob/main/docs/Overview.png
 
 ## 功能
 
