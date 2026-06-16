@@ -45,12 +45,6 @@ python -m http.server 8000
 # 然后访问 http://localhost:8000/
 ```
 
-**方式三 · 在线访问**
-
-如果本仓库开启了 GitHub Pages，可直接在浏览器打开对应网址，无需下载。
-
-> 「单本关系图」与「关系网」会从 CDN 加载图形库 [vis-network](https://visjs.github.io/vis-network/)，首次使用需联网，之后由浏览器缓存。其余功能完全离线可用。
-
 ## 文件结构
 
 | 文件 | 作用 |
@@ -76,6 +70,7 @@ python -m http.server 8000
 
 - 没有账号、没有服务器、没有任何追踪。所有数据保存在你浏览器的 localStorage 中。
 - localStorage 可能被浏览器清理，请在「数据」页定期**导出 JSON 备份**；更换设备或文件版本时，导出旧数据再导入即可迁移。
+- 不提供任何电子书资源。
 
 ## 技术
 
