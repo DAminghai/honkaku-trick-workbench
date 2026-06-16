@@ -19,7 +19,8 @@
 
 <!-- 建议在此处放一张界面截图： -->
 <!-- ![界面预览](docs/screenshot.png) -->
-https://github.com/DAminghai/honkaku-trick-workbench/blob/main/docs/Overview.png
+<img width="3827" height="1871" alt="Overview" src="https://github.com/user-attachments/assets/45d7fb8a-4698-4c7f-a2aa-0124ea629a7c" />
+
 
 ## 功能
 
