@@ -20,6 +20,19 @@
   nav.tabs button:hover{color:var(--ink)}
   nav.tabs button[aria-selected="true"]{color:var(--ink);font-weight:600;background:var(--paper);border-color:var(--ink);border-bottom-color:var(--paper)}
   nav.tabs button .n{font-family:var(--mono);font-size:11px;color:var(--seal);margin-left:5px}
+  nav.tabs .helpbtn{margin-left:auto;align-self:center;border:1.4px solid var(--seal-soft);background:rgba(140,47,42,.06);color:var(--seal);border-radius:8px;font-family:var(--sans);font-size:12.5px;font-weight:600;padding:7px 13px;cursor:pointer;margin-bottom:4px}
+  nav.tabs .helpbtn:hover{background:var(--seal);color:#fff;border-color:var(--seal)}
+  .pagehint{font-size:12.5px;color:var(--ink-soft);background:rgba(140,47,42,.05);border:1px solid var(--line);border-left:3px solid var(--seal-soft);border-radius:8px;padding:8px 12px;margin:0 0 16px;line-height:1.5}
+  .pagehint b{color:var(--seal);font-weight:600}
+  .help-sec{margin:0 0 18px}
+  .help-sec h4{font-family:var(--serif);font-size:15.5px;margin:0 0 6px;color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:4px}
+  .help-sec p{font-size:13.5px;color:var(--ink-soft);line-height:1.7;margin:4px 0}
+  .help-sec ul{margin:5px 0;padding-left:18px}
+  .help-sec li{font-size:13.5px;color:var(--ink-soft);line-height:1.7;margin:3px 0}
+  .help-sec b{color:var(--ink)}
+  .help-step{display:flex;gap:10px;align-items:flex-start;margin:7px 0;font-size:13.5px;color:var(--ink-soft);line-height:1.6}
+  .help-step .num{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--seal);color:#fff;font-family:var(--mono);font-size:12px;display:grid;place-items:center;margin-top:1px}
+  .help-step b{color:var(--ink)}
   .panel{display:none;padding:20px 0 0} .panel.on{display:block}
   .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
   .search{flex:1;min-width:150px;position:relative}
@@ -71,6 +84,11 @@
   .cross-ctrl select,.cross-ctrl input[type=text]{font-family:var(--sans);font-size:13px;padding:7px 9px;border:1.4px solid var(--line-strong);border-radius:8px;background:#fbfaf6;color:var(--ink)}
   .cross-ctrl label{font-size:12.5px;color:var(--ink-soft);display:inline-flex;align-items:center;gap:5px}
   #crossWrap{height:520px;border:1.5px solid var(--line-strong);border-radius:12px;background:#fbfaf6;overflow:hidden}
+  #crossWrap.star{background:#0b1020;background-image:radial-gradient(1.4px 1.4px at 18% 28%,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 68% 62%,rgba(255,255,255,.55),transparent),radial-gradient(1.2px 1.2px at 42% 82%,rgba(255,255,255,.6),transparent),radial-gradient(1.6px 1.6px at 84% 22%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 30% 55%,rgba(255,255,255,.4),transparent)}
+  .btn.active{background:var(--seal);color:#fff;border-color:var(--seal)}
+  .tbtn.active{background:var(--seal);color:#fff;border-color:var(--seal)}
+  .pick .opt .opx{margin-left:7px;font-weight:700;opacity:.6;cursor:pointer}
+  .pick .opt .opx:hover{opacity:1}
   #crossInfo{margin-top:12px;border:1.5px solid var(--line-strong);border-radius:12px;background:#fbfaf6;padding:14px 16px;font-size:13.5px;min-height:60px}
   #crossInfo h4{font-family:var(--serif);margin:0 0 6px;font-size:16px}
   .linkform{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0 10px;padding:12px;border:1.5px dashed var(--line-strong);border-radius:12px}
@@ -178,10 +196,12 @@
       <button role="tab" aria-selected="false" data-tab="insight">灵感矩阵</button>
       <button role="tab" aria-selected="false" data-tab="ideas">灵感箱<span class="n" id="nIdeas"></span></button>
       <button role="tab" aria-selected="false" data-tab="data">数据</button>
+      <button class="helpbtn" onclick="openHelp()">? 使用指南</button>
     </nav>
   </header>
 
   <section class="panel on" id="p-list" role="tabpanel">
+    <p class="pagehint">你的藏书。左侧方块勾选<b>已读</b>；点「编辑」改信息、打题材标签；点「<b>拆解 +</b>」记录这本书的诡计；点「图谱」画这本书内部的人物/线索关系。</p>
     <div class="bar">
       <div class="search"><input id="q" placeholder="搜书名 / 作者 / 标签"></div>
       <div class="seg" id="viewSeg"><button data-v="sec" aria-pressed="true">按分区</button><button data-v="tag" aria-pressed="false">按标签</button><button data-v="author" aria-pressed="false">按作者</button></div>
@@ -192,16 +212,19 @@
   </section>
 
   <section class="panel" id="p-lib" role="tabpanel">
+    <p class="pagehint">你写过的所有<b>拆解卡片</b>汇总。可按技法标签筛选、搜索；点「⇄ 对照两本」并排比较两本并存成关联。</p>
     <div class="bar"><div class="search"><input id="qlib" placeholder="搜拆解记录"></div><button class="addbtn alt" onclick="openCompare()">⇄ 对照两本</button><div class="meter" id="libMeter"></div></div>
     <div class="pick" id="libFilter" style="margin-bottom:16px"></div>
     <div class="cards" id="libRoot"></div>
   </section>
 
   <section class="panel" id="p-cross" role="tabpanel">
+    <p class="pagehint">把书连成一张网（每个点是一本书，连得越多越大）。点「<b>＋ 连接模式</b>」后<b>依次点两个节点</b>即可建立关联；点节点会聚焦高亮邻居，点已有连线可改备注/颜色。</p>
     <div class="cross-ctrl">
       <select id="crossTag"></select>
       <label><input type="checkbox" id="crossAuto"> 同标签自动连线</label>
-      <button class="btn ghost sm" onclick="crossEdgeMode()">＋连线模式</button>
+      <button class="btn ghost sm" id="linkModeBtn" onclick="toggleLinkMode()">＋ 连接模式</button>
+      <button class="btn ghost sm" id="floatBtn" onclick="toggleFloat()">✦ 漂浮：开</button>
       <button class="btn ghost sm" onclick="exportCrossPNG()">导出 PNG</button>
       <button class="btn ghost sm" onclick="buildCross()">重绘</button>
     </div>
@@ -215,6 +238,7 @@
   </section>
 
   <section class="panel" id="p-insight" role="tabpanel">
+    <p class="pagehint">上方是<b>偏食分析</b>（你的标签/作者分布与盲区）。下方矩阵是 技法 × 题材：有数字的格子点开看是哪几本，<b>空格 ＝ 没人组合过的诡计</b>，点它直接生成一张灵感卡。</p>
     <div class="summ" id="summ"></div>
     <div class="statgrid" id="statgrid"></div>
     <div class="mx-h">
@@ -229,55 +253,62 @@
   </section>
 
   <section class="panel" id="p-ideas" role="tabpanel">
+    <p class="pagehint">你的<b>原创诡计点子</b>。可手动「+ 新建灵感」，也可从「灵感矩阵」的空格一键生成；每条灵感可挂上启发它的书。</p>
     <div class="bar"><div class="search"><input id="qideas" placeholder="搜灵感"></div><button class="addbtn" onclick="openIdeaModal(null)">+ 新建灵感</button><div class="meter" id="ideaMeter"></div></div>
     <div class="cards" id="ideaRoot"></div>
   </section>
 
   <section class="panel" id="p-data" role="tabpanel">
+    <p class="pagehint">备份与还原。数据只存在本机浏览器，<b>请定期导出 JSON</b>；换设备或换版本文件时先导出旧的、再到这里导入。也可在此管理自定义分区与标签。</p>
     <div class="data-card"><h4>导出 / 备份</h4><p>localStorage 偶尔会被浏览器清掉，定期导出 JSON 才安全（含书目、标签、拆解、图谱、关系网、灵感、自定义分区与技法）。</p><div class="row"><button class="btn ghost" onclick="exportJSON()">导出 JSON 备份</button><button class="btn ghost" onclick="exportMD()">导出为 Markdown</button></div></div>
     <div class="data-card"><h4>导入 / 还原</h4><p>从导出的 JSON 恢复全部数据（覆盖当前）。换新版本文件时，先在旧文件导出、再到这里导入。</p><div class="row"><label class="btn ghost" style="cursor:pointer">选择 JSON 文件<input type="file" id="imp" accept="application/json,.json" hidden></label><button class="btn danger" onclick="resetAll()">清空全部数据</button></div></div>
     <div class="data-card"><h4>自定义分区管理</h4><p>在添加 / 编辑书目时，分区下拉里选「+ 新建分区…」即可创建。已建的自定义分区在此重命名或删除（删除后归入「未分类」）。</p><div class="secmgr" id="secMgr"></div></div>
+    <div class="data-card"><h4>标签管理</h4><p>删除或重命名标签，改动会同步到所有书与拆解。技法标签是灵感矩阵的行，打错字可在此清理。（内置技法不可删，可在拆解里取消勾选。）</p><div style="font-family:var(--mono);font-size:11px;color:var(--seal);margin:2px 0 5px">自定义技法标签</div><div class="secmgr" id="techMgr"></div><div style="font-family:var(--mono);font-size:11px;color:var(--seal);margin:16px 0 5px">题材标签（已使用）</div><div class="secmgr" id="themeMgr"></div></div>
     <div class="data-card"><h4>关于</h4><p>书单数据在 <code>books.js</code>，与应用逻辑分离，便于增删与协作。图谱用到联网加载的 vis-network（首次需联网，之后缓存）。更稳的存储：跑 <code>python -m http.server</code> 后访问 <code>http://localhost:8000/</code>。</p></div>
   </section>
 </div>
 
-<!-- 书目编辑器 -->
 <div class="scrim" id="bscrim" onclick="closeBookModal()"></div>
 <div class="modal" id="bmodal" role="dialog" aria-modal="true">
   <div class="m-head"><div><div class="lbl" id="bmLbl">添加书目</div><h3 id="bmTitle">新书目</h3></div><button class="x" onclick="closeBookModal()">×</button></div>
   <div class="m-body">
     <div class="two"><div class="fld"><label>书名</label><input type="text" id="bTitle"></div><div class="fld"><label>作者</label><input type="text" id="bAuthor"></div></div>
     <div class="fld"><label>一句话概括</label><input type="text" id="bNote"></div>
-    <div class="fld"><label>归入分区</label><select id="bSec" onchange="onSecSelect()"></select></div>
+    <div class="fld"><label>归入分区</label><div style="display:flex;gap:8px"><select id="bSec" onchange="onSecSelect()" style="flex:1"></select><button type="button" class="tbtn" id="bSecDel" onclick="deleteCurrentSec()" title="删除当前自定义分区">✕</button></div></div>
     <div class="fld"><label>题材 / 分类标签</label><div class="chips" id="bChips"></div><input type="text" id="bTagInput" placeholder="输入标签后回车" list="tagList"><datalist id="tagList"></datalist><div class="suggest" id="bSuggest"></div></div>
     <div class="m-foot"><button class="btn primary" onclick="saveBook()">保存书目</button><button class="btn ghost" onclick="closeBookModal()">取消</button><button class="btn danger" id="bDel" onclick="deleteBook()" style="display:none">删除此书</button></div>
   </div>
 </div>
 
-<!-- 拆解编辑器 -->
 <div class="scrim" id="scrim" onclick="closeModal()"></div>
 <div class="modal" id="modal" role="dialog" aria-modal="true">
   <div class="m-head"><div><div class="lbl">拆解卷宗</div><h3 id="mTitle">—</h3></div><button class="x" onclick="closeModal()">×</button></div>
   <div class="m-body">
     <div class="fld"><label>技法标签（可多选 / 可自定义）</label><div class="pick" id="mTags"></div><input type="text" id="mTechInput" placeholder="+ 自定义技法，回车添加" list="techList" style="margin-top:8px"><datalist id="techList"></datalist></div>
+    <div class="fld"><label>谜面 / 案件设定 —— 案件是什么、核心谜题、读者看到的状况</label><textarea id="mSetup"></textarea></div>
     <div class="fld"><label>诡计核心（一句话）</label><input type="text" id="mCore"></div>
+    <div class="fld"><label>不可能性来源 —— 若是密室 / 不可能犯罪：表面上为何不可能</label><textarea id="mImposs"></textarea></div>
     <div class="fld"><label>线索布置 —— 关键线索藏在哪、怎么藏的</label><textarea id="mClues"></textarea></div>
+    <div class="fld"><label>误导 / 红鲱鱼 —— 作者如何把读者引向错误方向</label><textarea id="mMislead"></textarea></div>
+    <div class="fld"><label>伏笔与回收 —— 哪些细节先埋后收</label><textarea id="mFore"></textarea></div>
     <div class="fld"><label>反转点 —— 认知坍塌发生在何处、靠什么触发</label><textarea id="mTwist"></textarea></div>
+    <div class="fld"><label>关键解答 —— 破案的决定性一击 / 推理链如何收束</label><textarea id="mKey"></textarea></div>
+    <div class="fld"><label>凶手与动机</label><textarea id="mCulprit"></textarea></div>
     <div class="fld"><label>公平性自评</label><div class="stars" id="mStars" data-v="0"><span class="s" data-v="1">★</span><span class="s" data-v="2">★</span><span class="s" data-v="3">★</span><span class="s" data-v="4">★</span><span class="s" data-v="5">★</span></div></div>
     <div class="fld"><label>可借鉴点 —— 给你自己的小说</label><textarea id="mBorrow"></textarea></div>
+    <div class="fld"><label>缺陷 / 不满 —— 哪里不公平、不自然、可以更好</label><textarea id="mFlaw"></textarea></div>
     <div class="fld"><label>自由笔记</label><textarea id="mNotes"></textarea></div>
     <div class="m-foot"><button class="btn primary" onclick="saveBreakdown()">保存</button><button class="btn ghost" onclick="closeModal()">取消</button><button class="btn danger" id="mDel" onclick="deleteBreakdown()" style="display:none">删除拆解</button></div>
   </div>
 </div>
 
-<!-- 单本关系图 -->
 <div class="scrim" id="boardScrim" onclick="closeBoard()"></div>
 <div class="modal wide" id="boardModal" role="dialog" aria-modal="true">
   <div class="m-head"><div><div class="lbl">单本关系图</div><h3 id="boardTitle">—</h3></div><button class="x" onclick="closeBoard()">×</button></div>
   <div class="board-tools">
     <label style="font-size:12.5px;color:var(--ink-soft)">类型 <select id="nodeType"><option>人物</option><option>线索</option><option>诡计</option><option>事件</option><option>其他</option></select></label>
     <button class="tbtn" onclick="boardCmd('addNode')">＋ 加节点</button>
-    <button class="tbtn" onclick="boardCmd('addEdge')">／ 连线</button>
+    <button class="tbtn" id="boardEdgeBtn" onclick="boardCmd('addEdge')">／ 连线</button>
     <button class="tbtn" onclick="boardCmd('rename')">✎ 改名</button>
     <button class="tbtn" onclick="boardCmd('delete')">✕ 删除</button>
     <button class="tbtn" onclick="boardCmd('done')">完成</button>
@@ -286,7 +317,6 @@
   <div id="boardWrap"></div>
 </div>
 
-<!-- 灵感卡片 -->
 <div class="scrim" id="ideaScrim" onclick="closeIdeaModal()"></div>
 <div class="modal" id="ideaModal" role="dialog" aria-modal="true">
   <div class="m-head"><div><div class="lbl" id="ideaLbl">新建灵感</div><h3>原创诡计种子</h3></div><button class="x" onclick="closeIdeaModal()">×</button></div>
@@ -299,7 +329,6 @@
   </div>
 </div>
 
-<!-- 对照 -->
 <div class="scrim" id="cmpScrim" onclick="closeCompare()"></div>
 <div class="modal wide" id="cmpModal" role="dialog" aria-modal="true">
   <div class="m-head"><div><div class="lbl">对照两本</div><h3>异同分析</h3></div><button class="x" onclick="closeCompare()">×</button></div>
@@ -311,14 +340,67 @@
   </div>
 </div>
 
-<!-- 关联编辑（关系网内） -->
 <div class="scrim" id="leScrim" onclick="closeLinkEdit()"></div>
 <div class="modal" id="leModal" role="dialog" aria-modal="true">
   <div class="m-head"><div><div class="lbl" id="leLbl">新建关联</div><h3 id="leTitle">—</h3></div><button class="x" onclick="closeLinkEdit()">×</button></div>
   <div class="m-body">
-    <div class="fld"><label>关系类型</label><select id="leType"></select></div>
+    <div class="two"><div class="fld"><label>关系类型</label><select id="leType" onchange="leTypeChanged()"></select></div><div class="fld" style="flex:0 0 96px"><label>线条颜色</label><input type="color" id="leColor" style="height:38px;padding:2px"></div></div>
     <div class="fld"><label>异同备忘</label><textarea id="leNote" placeholder="它们相同点 / 不同点 / 谁更高明…"></textarea></div>
     <div class="m-foot"><button class="btn primary" onclick="saveLinkEdit()">保存</button><button class="btn ghost" onclick="closeLinkEdit()">取消</button><button class="btn danger" id="leDel" onclick="deleteLinkEdit()" style="display:none">删除关联</button></div>
+  </div>
+</div>
+
+<div class="scrim" id="helpScrim" onclick="closeHelp()"></div>
+<div class="modal wide" id="helpModal" role="dialog" aria-modal="true">
+  <div class="m-head"><div><div class="lbl">使用指南</div><h3>诡计拆解工作台 · 创作者深度指南</h3></div><button class="x" onclick="closeHelp()">×</button></div>
+  <div class="m-body">
+    <div class="help-sec">
+      <p>工作台的核心哲学是：<b>将阅读过的被动输入，转化为结构化的、可随时调用的写作弹药库。</b>整个系统围绕着“读 → 拆 → 连 → 找灵感”的闭环运转。</p>
+    </div>
+
+    <div class="help-sec">
+      <h4>一、 书单管理：建立你的素材坐标系</h4>
+      <ul>
+        <li><b>分区（Section）的用法：</b>相当于书籍的主分类。你可在添加时随时“+ 新建分区”。<br><span style="color:var(--ink-soft);font-size:12.5px"><i>实战技巧：</i>例如为你正在构思的“生辰密室”建一个专属的资料分区，将相关的参考书籍全部收拢其中。</span></li>
+        <li><b>题材/分类标签（Tags）：</b>跨越分区的细粒度标记。<br><span style="color:var(--ink-soft);font-size:12.5px"><i>实战技巧：</i>标签应当具体化，如“建筑-重力机关”、“民俗-道教”、“童谣杀人”，以便后期按图索骥提取素材。</span></li>
+      </ul>
+    </div>
+
+    <div class="help-sec">
+      <h4>二、 拆解卷宗：外科手术式的诡计剖析</h4>
+      <ul>
+        <li>点击书目的“拆解 +”进入。这里不是写读后感，而是进行<b>反向工程</b>。</li>
+        <li><b>线索布置与误导：</b>重点剖析前人是如何把真线索藏在视线盲区，又如何利用红鲱鱼吸引读者注意力的。</li>
+        <li><b>可借鉴点：</b>明确写下该手法中哪一部分可以直接“偷师”或进行变种改造（例如：“这个利用重力的物理机关，可以改造成利用道教五行相克中的水流来触发”）。</li>
+      </ul>
+    </div>
+
+    <div class="help-sec">
+      <h4>三、 图谱与关系网：侦探白板与诡计演化史</h4>
+      <ul>
+        <li><b>单本图谱（Board）：</b>内置的推理白板。当遇到如《首无》般多谜题并发的巨著时，可用来复盘三维建筑平面图或是真假解答的推导树。</li>
+        <li><b>跨书关系网（Cross Network）：</b>避免撞梗与寻找升级思路的利器。圆点代表书籍，连线代表手法上的血脉关系。点击“＋ 连接模式”即可建立羁绊。<br><span style="color:var(--ink-soft);font-size:12.5px"><i>实战技巧：</i>把两本同样使用了“时间诡计”的书连起来，在备注中写上它们各自的掩盖手法，借此反向思考你能否开创出第三种掩盖方式。</span></li>
+      </ul>
+    </div>
+
+    <div class="help-sec">
+      <h4>四、 终极武器：灵感矩阵与灵感箱</h4>
+      <ul>
+        <li><b>灵感矩阵（Insight Matrix）：</b>行=技法标签，列=题材标签。有数字的格子代表前人已有的组合，<b>带有“＋”号的空格则是无人涉足的处女地</b>。只需轻轻一点，即可直接在这个空白坐标上生成一张原创灵感卡！</li>
+        <li><b>灵感箱（Idea Box）：</b>记录你灵光一闪的诡计原型（例如：利用二十四节气的交替温差制造延时密室），并随时绑定那些为你带来启发的源头书目。</li>
+      </ul>
+    </div>
+
+    <div class="help-sec">
+      <h4>五、 数据安全与防丢指南（必读）</h4>
+      <ul>
+        <li>本工作台是纯本地、零后端的静态工具。这意味着它极速且绝对隐私安全，但代价是<b>所有数据仅存储在你当前浏览器的缓存中</b>。</li>
+        <li>如果你清除了浏览器缓存，或者使用了无痕/隐身模式关闭窗口，数据将会永久丢失。<b>请务必养成每次大量拆解后，去「数据」页点击“导出 JSON 备份”的良好习惯。</b></li>
+        <li>当你在另一台设备上使用，或获得了新版本的 HTML 文件时，只需在新环境的「数据」页导入你的 JSON 备份，一切心血即可瞬间无损恢复。你还可以利用“导出为 Markdown”功能，将素材库整装搬入 Obsidian 或 Notion。</li>
+      </ul>
+    </div>
+
+    <div class="m-foot"><button class="btn primary" onclick="closeHelp()">知道了，开始使用</button></div>
   </div>
 </div>
 
@@ -334,6 +416,7 @@ const SEC_TECH={s0:"多重解答",s1:"纯逻辑/排他",s2:"叙述诡计",s3:"�
 const SEC_THEME={s4:"设定系",s5:"民俗",s7:"女性侦探",s8:"黄金年代"};
 const LINK_TYPES=["同类技法","手法对照(相反)","演化/致敬","题材相同","共用母题","自定义"];
 const LINK_COLOR={"同类技法":"#3f6b4d","手法对照(相反)":"#8c2f2a","演化/致敬":"#9a7b2e","题材相同":"#3a6a8c","共用母题":"#6b4a8c","自定义":"#6b6356"};
+const LINK_STYLE={"同类技法":{dashes:false,width:2.8},"手法对照(相反)":{dashes:[9,6],width:2.8},"演化/致敬":{dashes:[2,4],width:2.4},"题材相同":{dashes:[14,5,3,5],width:2.2},"共用母题":{dashes:[1,6],width:2.6},"自定义":{dashes:false,width:2.2}};
 const PALETTE=["#8c2f2a","#3f6b4d","#3a6a8c","#9a7b2e","#6b4a8c","#a85a3c","#4a8c84","#8c5a6b","#5a6b8c","#6b8c3a","#8c3a6b","#3a8c5a"];
 const RAW=(typeof window!=="undefined"&&window.BUILTIN_BOOKS)?window.BUILTIN_BOOKS:[];
 const BUILTIN=RAW.map(b=>({sec:b[0],title:b[1],author:b[2],note:b[3],defaultRead:b[4],id:b[1],builtin:true}));
@@ -401,6 +484,7 @@ function updMeters(){const eff=effectiveBooks();$("#readN").textContent=eff.filt
 let editId=null,bmTags=[];
 function buildSecSelect(selKey){$("#bSec").innerHTML=sectionList().map(s=>`<option value="${s.key}">${esc(s.name)}</option>`).join("")+`<option value="__new__">+ 新建分区…</option>`;$("#bSec").value=selKey||"s9";}
 function onSecSelect(){if($("#bSec").value==="__new__"){const name=(prompt("新分区名称")||"").trim();if(name){const key="c"+Date.now().toString(36)+Math.random().toString(36).slice(2,4);customSections.push({key,name});saveSections();buildSecSelect(key);renderSecMgr();}else buildSecSelect("s9");}}
+function deleteCurrentSec(){const key=$("#bSec").value;if(!key||key[0]!=="c"){toast("内置分区不可删；请先在下拉里选中一个自定义分区");return;}const sec=customSections.find(s=>s.key===key);if(!sec)return;if(!confirm(`删除自定义分区「${sec.name}」？其中的书将归入「未分类」。`))return;customBooks.forEach(c=>{if(c.secKey===key)c.secKey="s9";});Object.values(overrides).forEach(o=>{if(o.secKey===key)o.secKey="s9";});customSections=customSections.filter(s=>s.key!==key);saveSections();saveBooks();buildSecSelect("s9");renderList();renderSecMgr();toast("已删除分区");}
 function openBookModal(id){editId=id;const isNew=!id;$("#bmLbl").textContent=isNew?"添加书目":"编辑书目";const b=isNew?{title:"",author:"",note:"",secKey:"s9"}:findBook(id);$("#bmTitle").textContent=isNew?"新书目":("《"+b.title+"》");$("#bTitle").value=b.title||"";$("#bAuthor").value=b.author||"";$("#bNote").value=b.note||"";buildSecSelect(validKey(b.secKey||"s9"));bmTags=isNew?[]:[...getTags(id)];renderBmTags();$("#bDel").style.display=isNew?"none":"inline-block";$("#bscrim").classList.add("on");$("#bmodal").classList.add("on");$("#bmodal").scrollTop=0;if(isNew)setTimeout(()=>$("#bTitle").focus(),50);}
 function closeBookModal(){$("#bscrim").classList.remove("on");$("#bmodal").classList.remove("on");editId=null;}
 function renderBmTags(){$("#bChips").innerHTML=bmTags.map((t,i)=>`<span class="chip">${esc(t)}<b data-i="${i}">×</b></span>`).join("");$$("#bChips .chip b").forEach(x=>x.onclick=()=>{bmTags.splice(+x.dataset.i,1);renderBmTags();});$("#tagList").innerHTML=CLASS_TAGS.map(t=>`<option value="${t}">`).join("");$("#bSuggest").innerHTML=CLASS_TAGS.filter(t=>!bmTags.includes(t)).map(t=>`<span class="s">${t}</span>`).join("");$$("#bSuggest .s").forEach(s=>s.onclick=()=>addBmTag(s.textContent));}
@@ -411,18 +495,34 @@ function deleteBook(){if(!editId)return;const b=findBook(editId);if(!confirm(`�
 
 /* ===== 分区管理 ===== */
 function renderSecMgr(){const root=$("#secMgr");if(!customSections.length){root.innerHTML=`<div style="font-size:12.5px;color:var(--ink-soft)">还没有自定义分区。</div>`;return;}root.innerHTML="";customSections.forEach(s=>{const cnt=effectiveBooks().filter(b=>b.secKey===s.key).length;const row=document.createElement("div");row.className="secrow";row.innerHTML=`<span>${esc(s.name)}</span><span style="font-family:var(--mono);font-size:11px;color:var(--ink-soft)">${cnt} 本</span><span class="mini" data-act="rename">重命名</span><span class="mini" data-act="del">删除</span>`;row.querySelector('[data-act="rename"]').onclick=()=>{const n=(prompt("新名称",s.name)||"").trim();if(n){s.name=n;saveSections();renderSecMgr();renderList();}};row.querySelector('[data-act="del"]').onclick=()=>{if(!confirm(`删除分区「${s.name}」？其中的书归入「未分类」。`))return;customBooks.forEach(c=>{if(c.secKey===s.key)c.secKey="s9";});Object.values(overrides).forEach(o=>{if(o.secKey===s.key)o.secKey="s9";});customSections=customSections.filter(x=>x.key!==s.key);saveSections();saveBooks();renderSecMgr();renderList();toast("已删除分区");};root.appendChild(row);});}
+function tagRow(name,cnt,unit,onRename,onDelete){const row=document.createElement("div");row.className="secrow";row.innerHTML=`<span>${esc(name)}</span><span style="font-family:var(--mono);font-size:11px;color:var(--ink-soft)">${cnt} ${unit}</span><span class="mini" data-act="rename">重命名</span><span class="mini" data-act="del">删除</span>`;row.querySelector('[data-act="rename"]').onclick=onRename;row.querySelector('[data-act="del"]').onclick=onDelete;return row;}
+function renderTagMgr(){
+  const techCnt={};Object.values(breakdowns).forEach(e=>(e.tags||[]).forEach(t=>techCnt[t]=(techCnt[t]||0)+1));
+  const tRoot=$("#techMgr");tRoot.innerHTML="";
+  if(!customTech.length)tRoot.innerHTML=`<div style="font-size:12.5px;color:var(--ink-soft)">还没有自定义技法标签。</div>`;
+  else customTech.slice().sort((a,b)=>a.localeCompare(b,"zh")).forEach(t=>tRoot.appendChild(tagRow(t,techCnt[t]||0,"处",()=>renameTech(t),()=>deleteTech(t))));
+  const themeCnt={};Object.values(bookTags).forEach(arr=>(arr||[]).forEach(t=>themeCnt[t]=(themeCnt[t]||0)+1));
+  const keys=Object.keys(themeCnt).sort((a,b)=>a.localeCompare(b,"zh"));
+  const mRoot=$("#themeMgr");mRoot.innerHTML="";
+  if(!keys.length)mRoot.innerHTML=`<div style="font-size:12.5px;color:var(--ink-soft)">还没有给书打题材标签。</div>`;
+  else keys.forEach(t=>mRoot.appendChild(tagRow(t,themeCnt[t],"本",()=>renameTheme(t),()=>deleteTheme(t))));
+}
+function renameTech(t){const n=(prompt("新技法名",t)||"").trim();if(!n||n===t)return;customTech=customTech.filter(x=>x!==t);if(!TAGS.includes(n)&&!customTech.includes(n))customTech.push(n);Object.values(breakdowns).forEach(e=>{if(e.tags)e.tags=[...new Set(e.tags.map(x=>x===t?n:x))];});saveTech();saveBD();renderTagMgr();renderLib();toast("已重命名");}
+function deleteTech(t){if(!confirm(`删除技法标签「${t}」？将从所有拆解中移除。`))return;customTech=customTech.filter(x=>x!==t);Object.values(breakdowns).forEach(e=>{if(e.tags)e.tags=e.tags.filter(x=>x!==t);});saveTech();saveBD();renderTagMgr();renderLib();toast("已删除");}
+function renameTheme(t){const n=(prompt("新标签名",t)||"").trim();if(!n||n===t)return;Object.keys(bookTags).forEach(id=>{bookTags[id]=[...new Set((bookTags[id]||[]).map(x=>x===t?n:x))];});saveTags();renderTagMgr();renderList();toast("已重命名");}
+function deleteTheme(t){if(!confirm(`删除题材标签「${t}」？将从所有书上移除。`))return;Object.keys(bookTags).forEach(id=>{bookTags[id]=(bookTags[id]||[]).filter(x=>x!==t);});saveTags();renderTagMgr();renderList();toast("已删除");}
 
 /* ===== 拆解编辑器 ===== */
 let curId=null;
-function renderTechPicker(sel){const box=$("#mTags");box.innerHTML="";TAGS_ALL().forEach(t=>{const on=sel.has(t);const el=document.createElement("span");el.className="opt";el.textContent=t;el.dataset.on=on?1:0;el.onclick=()=>el.dataset.on=el.dataset.on==="1"?"0":"1";box.appendChild(el);});$("#techList").innerHTML=TAGS_ALL().map(t=>`<option value="${t}">`).join("");}
+function renderTechPicker(sel){const box=$("#mTags");box.innerHTML="";TAGS_ALL().forEach(t=>{const on=sel.has(t),custom=!TAGS.includes(t);const el=document.createElement("span");el.className="opt";el.dataset.on=on?1:0;el.innerHTML=esc(t)+(custom?' <b class="opx" title="删除此自定义技法">×</b>':"");el.onclick=ev=>{if(ev.target.classList.contains("opx"))return;el.dataset.on=el.dataset.on==="1"?"0":"1";};if(custom){el.querySelector(".opx").onclick=ev=>{ev.stopPropagation();if(!confirm(`删除自定义技法「${t}」？将从所有拆解中移除。`))return;customTech=customTech.filter(x=>x!==t);Object.values(breakdowns).forEach(e=>{if(e.tags)e.tags=e.tags.filter(x=>x!==t);});saveTech();saveBD();const cur=curTechSel();cur.delete(t);renderTechPicker(cur);toast("已删除技法");};}box.appendChild(el);});$("#techList").innerHTML=TAGS_ALL().map(t=>`<option value="${t}">`).join("");}
 function curTechSel(){return new Set($$("#mTags .opt").filter(o=>o.dataset.on==="1").map(o=>o.textContent));}
 function addCustomTech(name){name=(name||"").trim();if(!name)return;const sel=curTechSel();if(!TAGS_ALL().includes(name)){customTech.push(name);saveTech();}sel.add(name);renderTechPicker(sel);}
 $("#mTechInput").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===","){e.preventDefault();addCustomTech(e.target.value.replace(/[,，]/g,""));e.target.value="";}});
-function openModal(id){curId=id;const b=findBook(id)||{title:id,author:""},bd=breakdowns[id]||{};$("#mTitle").textContent="《"+b.title+"》"+(b.author?"  "+b.author:"");renderTechPicker(new Set(bd.tags||[]));$("#mCore").value=bd.core||"";$("#mClues").value=bd.clues||"";$("#mTwist").value=bd.twist||"";$("#mBorrow").value=bd.borrow||"";$("#mNotes").value=bd.notes||"";setStars(bd.fairness||0);$("#mDel").style.display=breakdowns[id]?"inline-block":"none";$("#scrim").classList.add("on");$("#modal").classList.add("on");$("#modal").scrollTop=0;}
+function openModal(id){curId=id;const b=findBook(id)||{title:id,author:""},bd=breakdowns[id]||{};$("#mTitle").textContent="《"+b.title+"》"+(b.author?"  "+b.author:"");renderTechPicker(new Set(bd.tags||[]));$("#mSetup").value=bd.setup||"";$("#mCore").value=bd.core||"";$("#mImposs").value=bd.imposs||"";$("#mClues").value=bd.clues||"";$("#mMislead").value=bd.mislead||"";$("#mFore").value=bd.fore||"";$("#mTwist").value=bd.twist||"";$("#mKey").value=bd.key||"";$("#mCulprit").value=bd.culprit||"";$("#mBorrow").value=bd.borrow||"";$("#mFlaw").value=bd.flaw||"";$("#mNotes").value=bd.notes||"";setStars(bd.fairness||0);$("#mDel").style.display=breakdowns[id]?"inline-block":"none";$("#scrim").classList.add("on");$("#modal").classList.add("on");$("#modal").scrollTop=0;}
 function closeModal(){$("#scrim").classList.remove("on");$("#modal").classList.remove("on");curId=null;}
 function setStars(v){$("#mStars").dataset.v=v;$$("#mStars .s").forEach(s=>s.classList.toggle("lit",+s.dataset.v<=v));}
 $$("#mStars .s").forEach(s=>s.onclick=()=>{const v=+s.dataset.v;setStars(v===+$("#mStars").dataset.v?0:v);});
-function saveBreakdown(){if(!curId)return;const tags=[...curTechSel()];const e={author:(findBook(curId)||{}).author||"",tags,core:$("#mCore").value.trim(),clues:$("#mClues").value.trim(),twist:$("#mTwist").value.trim(),fairness:+$("#mStars").dataset.v,borrow:$("#mBorrow").value.trim(),notes:$("#mNotes").value.trim(),updated:today()};const empty=!e.core&&!e.clues&&!e.twist&&!e.borrow&&!e.notes&&!e.tags.length&&!e.fairness;if(empty)delete breakdowns[curId];else breakdowns[curId]=e;saveBD();closeModal();renderList();renderLib();updMeters();toast(empty?"空拆解未保存":"已保存");}
+function saveBreakdown(){if(!curId)return;const tags=[...curTechSel()];const e={author:(findBook(curId)||{}).author||"",tags,setup:$("#mSetup").value.trim(),core:$("#mCore").value.trim(),imposs:$("#mImposs").value.trim(),clues:$("#mClues").value.trim(),mislead:$("#mMislead").value.trim(),fore:$("#mFore").value.trim(),twist:$("#mTwist").value.trim(),key:$("#mKey").value.trim(),culprit:$("#mCulprit").value.trim(),fairness:+$("#mStars").dataset.v,borrow:$("#mBorrow").value.trim(),flaw:$("#mFlaw").value.trim(),notes:$("#mNotes").value.trim(),updated:today()};const empty=!e.core&&!e.clues&&!e.twist&&!e.borrow&&!e.notes&&!e.setup&&!e.imposs&&!e.mislead&&!e.fore&&!e.key&&!e.culprit&&!e.flaw&&!e.tags.length&&!e.fairness;if(empty)delete breakdowns[curId];else breakdowns[curId]=e;saveBD();closeModal();renderList();renderLib();updMeters();toast(empty?"空拆解未保存":"已保存");}
 function deleteBreakdown(){if(curId){delete breakdowns[curId];saveBD();closeModal();renderList();renderLib();updMeters();toast("已删除");}}
 
 /* ===== 拆解库 ===== */
@@ -431,23 +531,32 @@ function renderLibFilter(){const box=$("#libFilter");box.innerHTML="";const all=
 function renderLib(){renderLibFilter();const q=($("#qlib").value||"").trim().toLowerCase();const root=$("#libRoot");root.innerHTML="";let entries=Object.entries(breakdowns);if(libTagFilter)entries=entries.filter(([id,e])=>(e.tags||[]).includes(libTagFilter));if(q)entries=entries.filter(([id,e])=>{const b=findBook(id)||{};return (id+" "+(b.title||"")+" "+(e.core||"")+(e.notes||"")+(e.borrow||"")).toLowerCase().includes(q);});entries.sort((a,b)=>(b[1].updated||"").localeCompare(a[1].updated||""));$("#libMeter").textContent=entries.length+" 条";if(!entries.length){root.innerHTML=`<div class="empty">还没有拆解记录。回「书单」点任意一本的「拆解 +」开始。</div>`;return;}entries.forEach(([id,e])=>{const b=findBook(id)||{title:id};const c=document.createElement("div");c.className="card";c.innerHTML=`<div class="ct">${esc(b.title||id)}<span class="ca">${esc(e.author||"")}</span></div>${e.core?`<div class="core">${esc(e.core)}</div>`:""}<div class="tags">${(e.tags||[]).map(t=>`<span class="tg">${esc(t)}</span>`).join("")}</div><div class="meta" style="margin-top:8px">公平性 ${"★".repeat(e.fairness||0)}${"☆".repeat(5-(e.fairness||0))} · 更新 ${e.updated||"—"}</div>`;c.onclick=()=>openModal(id);root.appendChild(c);});}
 
 /* ===== 单本关系图 ===== */
-let boardNet=null,boardNodes=null,boardEdges=null,curBoardId=null,saveTimer=null;
-const BOARD_GROUPS={人物:{shape:"dot",color:{background:"#3a6a8c33",border:"#3a6a8c"}},线索:{shape:"box",color:{background:"#9a7b2e33",border:"#9a7b2e"}},诡计:{shape:"diamond",color:{background:"#8c2f2a33",border:"#8c2f2a"}},事件:{shape:"triangle",color:{background:"#3f6b4d33",border:"#3f6b4d"}},其他:{shape:"ellipse",color:{background:"#6b635633",border:"#6b6356"}}};
+let boardNet=null,boardNodes=null,boardEdges=null,curBoardId=null,saveTimer=null,boardLinkMode=false,boardPick=[];
+const BOARD_GROUPS={人物:{shape:"dot",color:{background:"#3a6a8c",border:"#274a63"}},线索:{shape:"box",color:{background:"#f6efdd",border:"#9a7b2e"}},诡计:{shape:"diamond",color:{background:"#8c2f2a",border:"#5e1f1b"}},事件:{shape:"triangle",color:{background:"#3f6b4d",border:"#2a4734"}},其他:{shape:"ellipse",color:{background:"#efeee9",border:"#6b6356"}}};
 function openBoard(id){if(typeof vis==="undefined"){toast("图谱组件未加载，请联网后刷新再试");return;}curBoardId=id;const b=findBook(id);$("#boardTitle").textContent="《"+b.title+"》关系图";const saved=boards[id]||{nodes:[],edges:[]};boardNodes=new vis.DataSet(saved.nodes.map(n=>({...n})));boardEdges=new vis.DataSet((saved.edges||[]).map(e=>({...e})));$("#boardScrim").classList.add("on");$("#boardModal").classList.add("on");setTimeout(buildBoardNet,40);}
-function buildBoardNet(){const cont=$("#boardWrap");const opts={groups:BOARD_GROUPS,nodes:{font:{face:"PingFang SC, system-ui",size:14,color:"#1d1b18"},borderWidth:1.5,size:16},edges:{font:{size:12,color:"#5a564e",background:"#fbfaf6",strokeWidth:0},color:{color:"#bdb7a6",highlight:"#8c2f2a"},arrows:{to:{enabled:false}},smooth:{type:"continuous"}},physics:{enabled:false},interaction:{hover:true,multiselect:false},manipulation:{enabled:false,addNode:(d,cb)=>{const l=prompt("节点名称");if(l===null)return cb(null);d.label=l;d.group=$("#nodeType").value;cb(d);},addEdge:(d,cb)=>{if(d.from===d.to)return cb(null);const l=prompt("这条连线的关系（可留空，如：怀疑 / 指向 / 误导）","")||"";d.label=l;cb(d);}}};boardNet=new vis.Network(cont,{nodes:boardNodes,edges:boardEdges},opts);const sched=()=>{clearTimeout(saveTimer);saveTimer=setTimeout(persistBoard,300);};boardNodes.on("*",sched);boardEdges.on("*",sched);boardNet.on("dragEnd",sched);}
-function boardCmd(c){if(!boardNet)return;if(c==="addNode"){boardNet.addNodeMode();toast("点画布空白处放置节点");}else if(c==="addEdge"){boardNet.addEdgeMode();toast("从一个节点拖到另一个节点连线");}else if(c==="rename"){const s=boardNet.getSelectedNodes();if(!s.length){toast("先点选一个节点");return;}const n=boardNodes.get(s[0]);const l=prompt("改名",n.label||"");if(l!==null)boardNodes.update({id:s[0],label:l});}else if(c==="delete"){if(!boardNet.getSelectedNodes().length&&!boardNet.getSelectedEdges().length){toast("先点选要删的节点或连线");return;}boardNet.deleteSelected();}else if(c==="done"){boardNet.disableEditMode();toast("已退出编辑模式");}}
+function buildBoardNet(){const cont=$("#boardWrap");const opts={groups:BOARD_GROUPS,nodes:{font:{face:"PingFang SC, system-ui",size:14,color:"#1d1b18"},borderWidth:1.5,size:16},edges:{font:{size:12,color:"#5a564e",background:"#fbfaf6",strokeWidth:0},color:{color:"#bdb7a6",highlight:"#8c2f2a"},arrows:{to:{enabled:false}},smooth:{type:"continuous"}},physics:{enabled:false},interaction:{hover:true,multiselect:false},manipulation:{enabled:false,addNode:(d,cb)=>{const l=prompt("节点名称");if(l===null)return cb(null);d.label=l;d.group=$("#nodeType").value;cb(d);},addEdge:(d,cb)=>{if(d.from===d.to)return cb(null);const l=prompt("这条连线的关系（可留空，如：怀疑 / 指向 / 误导）","")||"";d.label=l;cb(d);}}};boardNet=new vis.Network(cont,{nodes:boardNodes,edges:boardEdges},opts);const sched=()=>{clearTimeout(saveTimer);saveTimer=setTimeout(persistBoard,300);};boardNodes.on("*",sched);boardEdges.on("*",sched);boardNet.on("dragEnd",sched);boardNet.on("click",p=>{if(boardLinkMode&&p.nodes.length)boardPickFn(p.nodes[0]);});}
+function boardCmd(c){if(!boardNet)return;if(c==="addNode"){boardLinkMode=false;boardPick=[];updBoardLinkBtn();boardNet.addNodeMode();toast("点画布空白处放置节点");}else if(c==="addEdge"){boardLinkMode=!boardLinkMode;boardPick=[];boardNet.unselectAll();updBoardLinkBtn();toast(boardLinkMode?"连接模式：依次点两个节点":"已退出连接模式");}else if(c==="rename"){const s=boardNet.getSelectedNodes();if(!s.length){toast("先点选一个节点");return;}const n=boardNodes.get(s[0]);const l=prompt("改名",n.label||"");if(l!==null)boardNodes.update({id:s[0],label:l});}else if(c==="delete"){if(!boardNet.getSelectedNodes().length&&!boardNet.getSelectedEdges().length){toast("先点选要删的节点或连线");return;}boardNet.deleteSelected();}else if(c==="done"){boardLinkMode=false;boardPick=[];updBoardLinkBtn();boardNet.disableEditMode();toast("已退出编辑模式");}}
+function updBoardLinkBtn(){const b=$("#boardEdgeBtn");if(b){b.textContent=boardLinkMode?"● 连接中…":"／ 连线";b.classList.toggle("active",boardLinkMode);}}
+function boardPickFn(id){if(boardPick.length&&boardPick[0]===id){boardPick=[];boardNet.unselectAll();toast("已取消起点");return;}if(!boardPick.length){boardPick=[id];boardNet.selectNodes([id]);toast("起点已选，再点一个节点");return;}const a=boardPick[0];boardPick=[];boardNet.unselectAll();if(a===id)return;const l=prompt("这条连线的关系（可留空，如：怀疑 / 指向 / 误导）","")||"";boardEdges.add({id:"e"+Date.now().toString(36)+Math.random().toString(36).slice(2,4),from:a,to:id,label:l});}
 function persistBoard(){if(!curBoardId||!boardNet)return;const pos=boardNet.getPositions();const nodes=boardNodes.get().map(n=>({id:n.id,label:n.label,group:n.group,x:(pos[n.id]||{}).x,y:(pos[n.id]||{}).y}));const edges=boardEdges.get().map(e=>({id:e.id,from:e.from,to:e.to,label:e.label||""}));boards[curBoardId]={nodes,edges};saveBoards();}
 function closeBoard(){persistBoard();if(boardNet){boardNet.destroy();boardNet=null;}$("#boardScrim").classList.remove("on");$("#boardModal").classList.remove("on");curBoardId=null;renderList();}
 function exportBoardPNG(){if(!boardNet){toast("先打开一本书的图谱");return;}netPNG(boardNet,"关系图_"+today()+".png");}
 
 /* ===== 跨书关系网 ===== */
-let crossNet=null;
+let crossNet=null,crossNodesDS=null,crossEdgesDS=null,linkMode=false,linkPick=[],floatMode=((localStorage.getItem("mb_float_v1")||"1")==="1");
 function fillCrossControls(){const used=new Set();effectiveBooks().forEach(b=>{getTags(b.id).forEach(t=>used.add(t));((breakdowns[b.id]||{}).tags||[]).forEach(t=>used.add(t));});$("#crossTag").innerHTML=`<option value="">全部标签</option>`+[...used].sort((a,b)=>a.localeCompare(b,"zh")).map(t=>`<option>${esc(t)}</option>`).join("");}
 function fillBookSelects(){const opts=effectiveBooks().sort((a,b)=>a.title.localeCompare(b.title,"zh")).map(b=>`<option value="${esc(b.id)}">${esc(b.title)}</option>`).join("");["#linkA","#linkB","#cmpA","#cmpB"].forEach(s=>$(s).innerHTML=opts);$("#linkType").innerHTML=LINK_TYPES.map(t=>`<option>${t}</option>`).join("");$("#cmpType").innerHTML=LINK_TYPES.map(t=>`<option>${t}</option>`).join("");$("#iBooks").innerHTML=opts;}
 function renderLinkList(){const root=$("#linkList");if(!links.length){root.innerHTML=`<div class="empty" style="padding:18px">还没有跨书关联。在图上点「＋连线模式」后连两点，或点已有连线编辑备注；也可用下面的下拉添加。</div>`;return;}root.innerHTML="";links.slice().reverse().forEach(l=>{const a=findBook(l.a),b=findBook(l.b);if(!a||!b)return;const row=document.createElement("div");row.className="linkrow";row.innerHTML=`<span class="lt" style="background:${LINK_COLOR[l.type]||"#6b6356"}">${esc(l.type)}</span><b>${esc(a.title)}</b> — <b>${esc(b.title)}</b>${l.note?`<span style="color:var(--ink-soft)"> · ${esc(l.note)}</span>`:""}<span class="del" data-id="${l.id}">删除</span>`;row.querySelector(".del").onclick=()=>{links=links.filter(x=>x.id!==l.id);saveLinks();renderLinkList();buildCross();updMeters();};root.appendChild(row);});}
 function addLinkFromForm(){const a=$("#linkA").value,b=$("#linkB").value,type=$("#linkType").value,note=$("#linkNote").value.trim();if(!a||!b||a===b){toast("请选择两本不同的书");return;}links.push({id:"l"+Date.now().toString(36)+Math.random().toString(36).slice(2,4),a,b,type,note});saveLinks();$("#linkNote").value="";renderLinkList();buildCross();updMeters();toast("已连接");}
-function crossEdgeMode(){if(!crossNet){toast("网里还没有节点");return;}crossNet.addEdgeMode();toast("从一个节点拖到另一个，建立关联");}
-function buildCross(){fillCrossControls();fillBookSelects();renderLinkList();const wrap=$("#crossWrap");if(typeof vis==="undefined"){wrap.innerHTML=`<div class="empty" style="height:100%;display:flex;align-items:center;justify-content:center">关系网需要联网加载图形组件，刷新后重试。</div>`;return;}const filter=$("#crossTag").value,showAuto=$("#crossAuto").checked;const eff=effectiveBooks();let engaged=eff.filter(b=>breakdowns[b.id]||getTags(b.id).length||links.some(l=>l.a===b.id||l.b===b.id));if(filter)engaged=engaged.filter(b=>getTags(b.id).includes(filter)||((breakdowns[b.id]||{}).tags||[]).includes(filter));if(!engaged.length){wrap.innerHTML=`<div class="empty" style="height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px"><div>这里还空着。</div><div style="font-size:12px">先去「书单」给几本书打题材标签、或写拆解，它们就会出现在网里。</div></div>`;if(crossNet){crossNet.destroy();crossNet=null;}return;}const idSet=new Set(engaged.map(b=>b.id));const visNodes=engaged.map(b=>{const t=primaryTag(b),c=colorForTag(t);return {id:b.id,label:b.title,color:{background:c.bg,border:c.bd,highlight:{background:c.bg,border:"#8c2f2a"}},title:(b.author||"")+(t?" · "+t:"")};});const edges=[];const seen=new Set();links.forEach(l=>{if(idSet.has(l.a)&&idSet.has(l.b)){edges.push({id:"m"+l.id,from:l.a,to:l.b,label:l.type,title:l.note||l.type,color:{color:LINK_COLOR[l.type]||"#6b6356"},width:2.4,font:{size:11,color:"#3a342c",background:"#f4f2ec",strokeWidth:0},smooth:{type:"continuous"}});seen.add([l.a,l.b].sort().join("|"));}});if(showAuto){const byTag={};engaged.forEach(b=>{const ts=new Set([...getTags(b.id),...((breakdowns[b.id]||{}).tags||[])]);ts.forEach(t=>{(byTag[t]=byTag[t]||[]).push(b.id);});});Object.values(byTag).forEach(arr=>{for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){const k=[arr[i],arr[j]].sort().join("|");if(seen.has(k))continue;seen.add(k);edges.push({id:"a"+k,from:arr[i],to:arr[j],dashes:true,color:{color:"#d2cdbe"},width:1,smooth:{type:"continuous"}});}});}const opts={nodes:{shape:"dot",size:15,borderWidth:2,font:{face:"PingFang SC, system-ui",size:13,color:"#1d1b18"}},physics:{solver:"barnesHut",barnesHut:{gravitationalConstant:-3500,springLength:130,springConstant:.04,damping:.4},stabilization:{iterations:160}},interaction:{hover:true,tooltipDelay:120},manipulation:{enabled:false,addEdge:(d,cb)=>{cb(null);if(d.from===d.to){toast("不能连到自己");return;}openLinkEdit("new",d.from,d.to,null);}}};if(crossNet)crossNet.destroy();crossNet=new vis.Network(wrap,{nodes:new vis.DataSet(visNodes),edges:new vis.DataSet(edges)},opts);crossNet.on("click",p=>{if(p.nodes.length)showCrossInfo(p.nodes[0]);else if(p.edges.length)clickEdge(p.edges[0]);else crossHint();});crossHint();}
+function toggleLinkMode(){if(!crossNet){toast("网里还没有节点");return;}linkMode=!linkMode;linkPick=[];if(crossNet)crossNet.unselectAll();updLinkModeBtn();toast(linkMode?"连接模式：依次点两个节点来连线":"已退出连接模式");}
+function updLinkModeBtn(){const b=$("#linkModeBtn");if(b){b.textContent=linkMode?"● 连接中…":"＋ 连接模式";b.classList.toggle("active",linkMode);}}
+function pickForLink(id){if(linkPick.length&&linkPick[0]===id){linkPick=[];if(crossNet)crossNet.unselectAll();toast("已取消起点");return;}if(!linkPick.length){linkPick=[id];if(crossNet)crossNet.selectNodes([id]);const b=findBook(id);toast("起点：《"+(b?b.title:id)+"》，再点一个节点");return;}const a=linkPick[0];linkPick=[];if(crossNet)crossNet.unselectAll();openLinkEdit("new",a,id,null);}
+function toggleFloat(){floatMode=!floatMode;localStorage.setItem("mb_float_v1",floatMode?"1":"0");if(crossNet)crossNet.setOptions({physics:{enabled:floatMode}});updFloatBtn();}
+function updFloatBtn(){const b=$("#floatBtn");if(b){b.textContent=floatMode?"✦ 漂浮：开":"✦ 漂浮：关";b.classList.toggle("active",floatMode);}}
+function focusNode(id){if(!crossNet||!crossNodesDS)return;const conn=new Set(crossNet.getConnectedNodes(id));conn.add(id);crossNodesDS.update(crossNodesDS.getIds().map(nid=>({id:nid,opacity:conn.has(nid)?1:0.18})));crossNet.selectNodes([id]);crossNet.focus(id,{scale:1.15,animation:{duration:650,easingFunction:"easeInOutCubic"}});}
+function clearFocus(){if(crossNodesDS)crossNodesDS.update(crossNodesDS.getIds().map(nid=>({id:nid,opacity:1})));if(crossNet)crossNet.unselectAll();}
+function leTypeChanged(){const t=$("#leType").value;$("#leColor").value=LINK_COLOR[t]||"#6b6356";}
+function buildCross(){fillCrossControls();fillBookSelects();renderLinkList();const wrap=$("#crossWrap");if(typeof vis==="undefined"){wrap.innerHTML=`<div class="empty" style="height:100%;display:flex;align-items:center;justify-content:center">关系网需要联网加载图形组件，刷新后重试。</div>`;return;}const filter=$("#crossTag").value,showAuto=$("#crossAuto").checked;const eff=effectiveBooks();let engaged=eff.filter(b=>breakdowns[b.id]||getTags(b.id).length||links.some(l=>l.a===b.id||l.b===b.id));if(filter)engaged=engaged.filter(b=>getTags(b.id).includes(filter)||((breakdowns[b.id]||{}).tags||[]).includes(filter));if(!engaged.length){wrap.innerHTML=`<div class="empty" style="height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px"><div>这里还空着。</div><div style="font-size:12px">先去「书单」给几本书打题材标签、或写拆解，它们就会出现在网里。</div></div>`;if(crossNet){crossNet.destroy();crossNet=null;}return;}const idSet=new Set(engaged.map(b=>b.id));const visNodes=engaged.map(b=>{const t=primaryTag(b),c=colorForTag(t);const deg=links.filter(l=>l.a===b.id||l.b===b.id).length;return {id:b.id,label:b.title,value:1+deg,color:{background:c.bd,border:"#ffffff",highlight:{background:c.bd,border:"#1d1b18"}},font:{color:"#1d1b18"},title:(b.author||"")+(t?" · "+t:"")};});const edges=[];const seen=new Set();links.forEach(l=>{if(idSet.has(l.a)&&idSet.has(l.b)){const st=LINK_STYLE[l.type]||{dashes:false,width:2.4};const col=l.color||LINK_COLOR[l.type]||"#6b6356";edges.push({id:"m"+l.id,from:l.a,to:l.b,label:l.type,title:l.note||l.type,dashes:st.dashes,color:{color:col,highlight:col},width:st.width,font:{size:11,color:"#3a342c",background:"#f4f2ec",strokeWidth:0},smooth:{type:"continuous"}});seen.add([l.a,l.b].sort().join("|"));}});if(showAuto){const byTag={};engaged.forEach(b=>{const ts=new Set([...getTags(b.id),...((breakdowns[b.id]||{}).tags||[])]);ts.forEach(t=>{(byTag[t]=byTag[t]||[]).push(b.id);});});Object.values(byTag).forEach(arr=>{for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){const k=[arr[i],arr[j]].sort().join("|");if(seen.has(k))continue;seen.add(k);edges.push({id:"a"+k,from:arr[i],to:arr[j],dashes:[2,5],color:{color:"#d2cdbe"},width:1,smooth:{type:"continuous"}});}});}const nodesDS=new vis.DataSet(visNodes),edgesDS=new vis.DataSet(edges);crossNodesDS=nodesDS;crossEdgesDS=edgesDS;const opts={nodes:{shape:"dot",scaling:{min:11,max:30,label:{enabled:true,min:12,max:20}},borderWidth:2.5,font:{face:"PingFang SC, system-ui",size:13,color:"#1d1b18"}},edges:{smooth:{type:"continuous"}},physics:{enabled:floatMode,solver:"barnesHut",barnesHut:{gravitationalConstant:-3500,springLength:135,springConstant:.04,damping:.5},stabilization:{iterations:150}},interaction:{hover:true,tooltipDelay:120,hoverConnectedEdges:true}};if(crossNet)crossNet.destroy();crossNet=new vis.Network(wrap,{nodes:nodesDS,edges:edgesDS},opts);crossNet.on("click",p=>{if(linkMode){if(p.nodes.length)pickForLink(p.nodes[0]);return;}if(p.nodes.length){focusNode(p.nodes[0]);showCrossInfo(p.nodes[0]);}else{clearFocus();if(p.edges.length)clickEdge(p.edges[0]);else crossHint();}});updLinkModeBtn();updFloatBtn();crossHint();}
 function clickEdge(eid){if(eid&&eid[0]==="m"){const l=links.find(x=>("m"+x.id)===eid);if(l)openLinkEdit("edit",l.a,l.b,l.id);}else{toast("这是同标签自动连线，仅作结构提示；要加备注请用手动关联");}}
 function crossHint(){$("#crossInfo").innerHTML=`<span style="color:var(--ink-soft);font-size:13px">点节点看拆解与关联；点实线连线可编辑备注。「＋连线模式」后拖动两点即可新建关联。实线=手动关联（按类型分色），虚线=共享标签的结构提示。</span>`;}
 function showCrossInfo(id){const b=findBook(id);if(!b)return;const bd=breakdowns[id]||{};const tags=[...new Set([...getTags(id),...(bd.tags||[])])];const rel=links.filter(l=>l.a===id||l.b===id).map(l=>{const o=findBook(l.a===id?l.b:l.a);return o?`<div style="margin-top:3px"><span style="background:${LINK_COLOR[l.type]||"#6b6356"};color:#fff;font-family:var(--mono);font-size:10px;padding:1px 7px;border-radius:20px">${esc(l.type)}</span> 与《${esc(o.title)}》${l.note?` — ${esc(l.note)}`:""}</div>`:"";}).join("");$("#crossInfo").innerHTML=`<h4>《${esc(b.title)}》<span style="font-weight:400;font-size:13px;color:var(--ink-soft)">${esc(b.author||"")}</span></h4>${tags.length?`<div class="tags" style="margin-bottom:6px">${tags.map(t=>`<span class="tg">${esc(t)}</span>`).join("")}</div>`:""}${bd.core?`<div style="font-size:13.5px"><b>诡计核心：</b>${esc(bd.core)}</div>`:`<div style="font-size:12.5px;color:var(--ink-soft)">（还没写这本的拆解）</div>`}${bd.twist?`<div style="font-size:13px;margin-top:3px"><b>反转：</b>${esc(bd.twist)}</div>`:""}${rel?`<div style="margin-top:8px;border-top:1px solid var(--line);padding-top:6px">${rel}</div>`:""}`;}
@@ -455,9 +564,9 @@ function exportCrossPNG(){if(!crossNet){toast("先生成关系网");return;}netP
 
 /* ===== 关联编辑弹窗 ===== */
 let leState=null;
-function openLinkEdit(mode,a,b,id){leState={mode,a,b,id};const ba=findBook(a),bb=findBook(b);$("#leLbl").textContent=mode==="new"?"新建关联":"编辑关联";$("#leTitle").textContent=`《${ba?ba.title:a}》— 《${bb?bb.title:b}》`;$("#leType").innerHTML=LINK_TYPES.map(t=>`<option>${t}</option>`).join("");const ex=mode==="edit"?links.find(l=>l.id===id):null;$("#leType").value=ex?ex.type:LINK_TYPES[0];$("#leNote").value=ex?(ex.note||""):"";$("#leDel").style.display=mode==="edit"?"inline-block":"none";$("#leScrim").classList.add("on");$("#leModal").classList.add("on");}
+function openLinkEdit(mode,a,b,id){leState={mode,a,b,id};const ba=findBook(a),bb=findBook(b);$("#leLbl").textContent=mode==="new"?"新建关联":"编辑关联";$("#leTitle").textContent=`《${ba?ba.title:a}》— 《${bb?bb.title:b}》`;$("#leType").innerHTML=LINK_TYPES.map(t=>`<option>${t}</option>`).join("");const ex=mode==="edit"?links.find(l=>l.id===id):null;$("#leType").value=ex?ex.type:LINK_TYPES[0];$("#leColor").value=(ex&&ex.color)?ex.color:(LINK_COLOR[$("#leType").value]||"#6b6356");$("#leNote").value=ex?(ex.note||""):"";$("#leDel").style.display=mode==="edit"?"inline-block":"none";$("#leScrim").classList.add("on");$("#leModal").classList.add("on");}
 function closeLinkEdit(){$("#leScrim").classList.remove("on");$("#leModal").classList.remove("on");leState=null;}
-function saveLinkEdit(){if(!leState)return;const type=$("#leType").value,note=$("#leNote").value.trim();if(leState.mode==="new"){links.push({id:"l"+Date.now().toString(36)+Math.random().toString(36).slice(2,4),a:leState.a,b:leState.b,type,note});}else{const l=links.find(x=>x.id===leState.id);if(l){l.type=type;l.note=note;}}saveLinks();closeLinkEdit();buildCross();updMeters();toast("已保存");}
+function saveLinkEdit(){if(!leState)return;const type=$("#leType").value,note=$("#leNote").value.trim(),color=$("#leColor").value;if(leState.mode==="new"){links.push({id:"l"+Date.now().toString(36)+Math.random().toString(36).slice(2,4),a:leState.a,b:leState.b,type,note,color});}else{const l=links.find(x=>x.id===leState.id);if(l){l.type=type;l.note=note;l.color=color;}}saveLinks();closeLinkEdit();buildCross();updMeters();toast("已保存");}
 function deleteLinkEdit(){if(leState&&leState.id){links=links.filter(x=>x.id!==leState.id);saveLinks();closeLinkEdit();buildCross();updMeters();toast("已删除");}}
 
 /* ===== 灵感矩阵 + 偏食 ===== */
@@ -484,7 +593,7 @@ function renderIdeas(){const q=($("#qideas").value||"").trim().toLowerCase();con
 /* ===== 对照 ===== */
 function openCompare(prefA,prefB){fillBookSelects();if(prefA)$("#cmpA").value=prefA;if(prefB)$("#cmpB").value=prefB;$("#cmpNote").value="";renderCompare();$("#cmpScrim").classList.add("on");$("#cmpModal").classList.add("on");$("#cmpModal").scrollTop=0;}
 function closeCompare(){$("#cmpScrim").classList.remove("on");$("#cmpModal").classList.remove("on");}
-function colHtml(id){const b=findBook(id);if(!b)return`<div class="col">—</div>`;const bd=breakdowns[id]||{};const tags=[...new Set([...getTags(id),...(bd.tags||[])])];return `<div class="col"><h5>《${esc(b.title)}》</h5><div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px">${esc(b.author||"")}</div>${tags.length?`<div class="tags" style="margin-bottom:6px">${tags.map(t=>`<span class="tg">${esc(t)}</span>`).join("")}</div>`:""}<div class="f"><b>诡计核心</b><br>${esc(bd.core||"—")}</div><div class="f"><b>线索布置</b><br>${esc(bd.clues||"—")}</div><div class="f"><b>反转点</b><br>${esc(bd.twist||"—")}</div><div class="f"><b>公平性</b> ${bd.fairness?"★".repeat(bd.fairness):"—"}</div></div>`;}
+function colHtml(id){const b=findBook(id);if(!b)return`<div class="col">—</div>`;const bd=breakdowns[id]||{};const tags=[...new Set([...getTags(id),...(bd.tags||[])])];return `<div class="col"><h5>《${esc(b.title)}》</h5><div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px">${esc(b.author||"")}</div>${tags.length?`<div class="tags" style="margin-bottom:6px">${tags.map(t=>`<span class="tg">${esc(t)}</span>`).join("")}</div>`:""}<div class="f"><b>谜面/案件</b><br>${esc(bd.setup||"—")}</div><div class="f"><b>诡计核心</b><br>${esc(bd.core||"—")}</div><div class="f"><b>线索布置</b><br>${esc(bd.clues||"—")}</div><div class="f"><b>误导/红鲱鱼</b><br>${esc(bd.mislead||"—")}</div><div class="f"><b>反转点</b><br>${esc(bd.twist||"—")}</div><div class="f"><b>关键解答</b><br>${esc(bd.key||"—")}</div><div class="f"><b>凶手与动机</b><br>${esc(bd.culprit||"—")}</div><div class="f"><b>公平性</b> ${bd.fairness?"★".repeat(bd.fairness):"—"}</div></div>`;}
 function renderCompare(){$("#cmpView").innerHTML=colHtml($("#cmpA").value)+colHtml($("#cmpB").value);}
 function saveCompareLink(){const a=$("#cmpA").value,b=$("#cmpB").value;if(!a||!b||a===b){toast("请选两本不同的书");return;}links.push({id:"l"+Date.now().toString(36)+Math.random().toString(36).slice(2,4),a,b,type:$("#cmpType").value,note:$("#cmpNote").value.trim()});saveLinks();updMeters();toast("已存入关系网");closeCompare();}
 
@@ -495,18 +604,21 @@ function svgToPng(svg,w,h,fn){const img=new Image();const blob=new Blob([svg],{t
 /* ===== 数据 ===== */
 function dl(name,text,type){const blob=new Blob([text],{type:type||"text/plain;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
 function exportJSON(){dl("诡计拆解备份_"+today()+".json",JSON.stringify({read:[...readSet],breakdowns,customBooks,deleted:[...deletedSet],bookTags,overrides,boards,links,ideas,customSections,customTech},null,2),"application/json");toast("已导出 JSON");}
-function exportMD(){let md="# 诡计拆解素材库\n\n";const entries=Object.entries(breakdowns).sort((a,b)=>(b[1].updated||"").localeCompare(a[1].updated||""));if(!entries.length)md+="_暂无拆解_\n\n";entries.forEach(([id,e])=>{const b=findBook(id)||{title:id};md+=`## 《${b.title||id}》 ${e.author||b.author||""}\n\n`;const bt=getTags(id);if(bt.length)md+=`- **题材标签**：${bt.join("、")}\n`;if(e.tags&&e.tags.length)md+=`- **技法**：${e.tags.join("、")}\n`;if(e.core)md+=`- **诡计核心**：${e.core}\n`;if(e.clues)md+=`- **线索布置**：${e.clues}\n`;if(e.twist)md+=`- **反转点**：${e.twist}\n`;if(e.fairness)md+=`- **公平性**：${e.fairness}/5\n`;if(e.borrow)md+=`- **可借鉴**：${e.borrow}\n`;if(e.notes)md+=`- **笔记**：${e.notes}\n`;const rel=links.filter(l=>l.a===id||l.b===id);if(rel.length)md+=`- **跨书关联**：`+rel.map(l=>{const o=findBook(l.a===id?l.b:l.a);return o?`${l.type}→《${o.title}》${l.note?"（"+l.note+"）":""}`:"";}).filter(Boolean).join("；")+`\n`;md+="\n";});if(ideas.length){md+=`# 灵感箱\n\n`;ideas.forEach(it=>{md+=`## ${it.title}\n\n`;if(it.body)md+=it.body+"\n\n";if(it.tags&&it.tags.length)md+=`- 标签：${it.tags.join("、")}\n`;const bks=(it.books||[]).map(id=>{const b=findBook(id);return b?b.title:null;}).filter(Boolean);if(bks.length)md+=`- 启发自：${bks.join("、")}\n`;md+="\n";});}dl("诡计拆解素材库.md",md,"text/markdown;charset=utf-8");toast("已导出 Markdown");}
-$("#imp").onchange=ev=>{const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.read)readSet=new Set(d.read);if(d.breakdowns)breakdowns=d.breakdowns;if(d.customBooks)customBooks=d.customBooks;if(d.deleted)deletedSet=new Set(d.deleted);if(d.bookTags)bookTags=d.bookTags;if(d.overrides)overrides=d.overrides;if(d.boards)boards=d.boards;if(d.links)links=d.links;if(d.ideas)ideas=d.ideas;if(d.customSections)customSections=d.customSections;if(d.customTech)customTech=d.customTech;customBooks.forEach(c=>{if(c.secKey==null&&c.sec!=null)c.secKey="s"+c.sec;if(c.secKey==null)c.secKey="s9";});saveRead();saveBD();saveBooks();saveTags();saveBoards();saveLinks();saveIdeas();saveSections();saveTech();renderList();renderLib();renderIdeas();renderSecMgr();updMeters();toast("已导入");}catch(e){toast("文件格式不对");}};r.readAsText(f);ev.target.value="";};
+function exportMD(){let md="# 诡计拆解素材库\n\n";const entries=Object.entries(breakdowns).sort((a,b)=>(b[1].updated||"").localeCompare(a[1].updated||""));if(!entries.length)md+="_暂无拆解_\n\n";entries.forEach(([id,e])=>{const b=findBook(id)||{title:id};md+=`## 《${b.title||id}》 ${e.author||b.author||""}\n\n`;const bt=getTags(id);if(bt.length)md+=`- **题材标签**：${bt.join("、")}\n`;if(e.tags&&e.tags.length)md+=`- **技法**：${e.tags.join("、")}\n`;if(e.setup)md+=`- **谜面/案件**：${e.setup}\n`;if(e.core)md+=`- **诡计核心**：${e.core}\n`;if(e.imposs)md+=`- **不可能性来源**：${e.imposs}\n`;if(e.clues)md+=`- **线索布置**：${e.clues}\n`;if(e.mislead)md+=`- **误导/红鲱鱼**：${e.mislead}\n`;if(e.fore)md+=`- **伏笔与回收**：${e.fore}\n`;if(e.twist)md+=`- **反转点**：${e.twist}\n`;if(e.key)md+=`- **关键解答**：${e.key}\n`;if(e.culprit)md+=`- **凶手与动机**：${e.culprit}\n`;if(e.fairness)md+=`- **公平性**：${e.fairness}/5\n`;if(e.borrow)md+=`- **可借鉴**：${e.borrow}\n`;if(e.flaw)md+=`- **缺陷/不满**：${e.flaw}\n`;if(e.notes)md+=`- **笔记**：${e.notes}\n`;const rel=links.filter(l=>l.a===id||l.b===id);if(rel.length)md+=`- **跨书关联**：`+rel.map(l=>{const o=findBook(l.a===id?l.b:l.a);return o?`${l.type}→《${o.title}》${l.note?"（"+l.note+"）":""}`:"";}).filter(Boolean).join("；")+`\n`;md+="\n";});if(ideas.length){md+=`# 灵感箱\n\n`;ideas.forEach(it=>{md+=`## ${it.title}\n\n`;if(it.body)md+=it.body+"\n\n";if(it.tags&&it.tags.length)md+=`- 标签：${it.tags.join("、")}\n`;const bks=(it.books||[]).map(id=>{const b=findBook(id);return b?b.title:null;}).filter(Boolean);if(bks.length)md+=`- 启发自：${bks.join("、")}\n`;md+="\n";});}dl("诡计拆解素材库.md",md,"text/markdown;charset=utf-8");toast("已导出 Markdown");}
+$("#imp").onchange=ev=>{const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.read)readSet=new Set(d.read);if(d.breakdowns)breakdowns=d.breakdowns;if(d.customBooks)customBooks=d.customBooks;if(d.deleted)deletedSet=new Set(d.deleted);if(d.bookTags)bookTags=d.bookTags;if(d.overrides)overrides=d.overrides;if(d.boards)boards=d.boards;if(d.links)links=d.links;if(d.ideas)ideas=d.ideas;if(d.customSections)customSections=d.customSections;if(d.customTech)customTech=d.customTech;customBooks.forEach(c=>{if(c.secKey==null&&c.sec!=null)c.secKey="s"+c.sec;if(c.secKey==null)c.secKey="s9";});saveRead();saveBD();saveBooks();saveTags();saveBoards();saveLinks();saveIdeas();saveSections();saveTech();renderList();renderLib();renderIdeas();renderSecMgr();renderTagMgr();updMeters();toast("已导入");}catch(e){toast("文件格式不对");}};r.readAsText(f);ev.target.value="";};
 function resetAll(){if(!confirm("清空所有数据？建议先导出 JSON。"))return;readSet=new Set();breakdowns={};customBooks=[];deletedSet=new Set();bookTags={};overrides={};boards={};links=[];ideas=[];customSections=[];customTech=[];saveRead();saveBD();saveBooks();saveTags();saveBoards();saveLinks();saveIdeas();saveSections();saveTech();renderList();renderLib();renderIdeas();renderSecMgr();updMeters();toast("已清空");}
 
 /* ===== 启动 ===== */
-$$("nav.tabs button").forEach(btn=>btn.onclick=()=>{$$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b===btn));const t=btn.dataset.tab;$$(".panel").forEach(p=>p.classList.remove("on"));$("#p-"+t).classList.add("on");if(t==="lib")renderLib();if(t==="cross")buildCross();if(t==="insight")renderInsights();if(t==="ideas")renderIdeas();if(t==="data")renderSecMgr();});
+$$("nav.tabs button[data-tab]").forEach(btn=>btn.onclick=()=>{$$("nav.tabs button[data-tab]").forEach(b=>b.setAttribute("aria-selected",b===btn));const t=btn.dataset.tab;$$(".panel").forEach(p=>p.classList.remove("on"));$("#p-"+t).classList.add("on");if(t==="lib")renderLib();if(t==="cross")buildCross();if(t==="insight")renderInsights();if(t==="ideas")renderIdeas();if(t==="data"){renderSecMgr();renderTagMgr();}});
 $$("#viewSeg button").forEach(b=>b.onclick=()=>{viewMode=b.dataset.v;$$("#viewSeg button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderList();});
 $("#crossTag").onchange=buildCross;$("#crossAuto").onchange=buildCross;
 $("#mxSec").onchange=renderMatrix;$("#mxNonEmpty").onchange=renderMatrix;
 $("#q").oninput=renderList;$("#qlib").oninput=renderLib;$("#qideas").oninput=renderIdeas;
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeBookModal();closeIdeaModal();closeCompare();closeLinkEdit();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeBookModal();closeIdeaModal();closeCompare();closeLinkEdit();closeHelp();}});
+function openHelp(){$("#helpScrim").classList.add("on");$("#helpModal").classList.add("on");$("#helpModal").scrollTop=0;}
+function closeHelp(){$("#helpScrim").classList.remove("on");$("#helpModal").classList.remove("on");localStorage.setItem("mb_seen_help_v1","1");}
 load();renderList();updMeters();
+if(!localStorage.getItem("mb_seen_help_v1"))setTimeout(openHelp,450);
 if(!RAW.length)setTimeout(()=>toast("未加载到 books.js，内置书单为空（仍可手动添加）"),300);
 </script>
 </body>
