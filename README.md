@@ -18,8 +18,6 @@
 
 <!-- 建议在此处放一张界面截图： -->
 <!-- ![界面预览](docs/screenshot.png) -->
-<img width="3827" height="1871" alt="Overview" src="https://github.com/user-attachments/assets/45d7fb8a-4698-4c7f-a2aa-0124ea629a7c" />
-
 
 ## 功能
 
@@ -47,6 +45,12 @@ python -m http.server 8000
 # 然后访问 http://localhost:8000/
 ```
 
+**方式三 · 在线访问**
+
+如果本仓库开启了 GitHub Pages，可直接在浏览器打开对应网址，无需下载。
+
+> 「单本关系图」与「关系网」会从 CDN 加载图形库 [vis-network](https://visjs.github.io/vis-network/)，首次使用需联网，之后由浏览器缓存。其余功能完全离线可用。
+
 ## 文件结构
 
 | 文件 | 作用 |
@@ -72,11 +76,28 @@ python -m http.server 8000
 
 - 没有账号、没有服务器、没有任何追踪。所有数据保存在你浏览器的 localStorage 中。
 - localStorage 可能被浏览器清理，请在「数据」页定期**导出 JSON 备份**；更换设备或文件版本时，导出旧数据再导入即可迁移。
-- 不提供任何电子书资源。
 
 ## 技术
 
 原生 HTML / CSS / JavaScript 单页应用，无构建步骤、无框架；图谱可视化使用 vis-network。
+
+## 支持作者 / Sponsor
+
+工具所有功能永久免费、无广告、无追踪。如果它帮到了你，欢迎请作者喝杯咖啡 ☕（完全自愿）。
+
+**国内**
+
+> 把你的微信 / 支付宝收款码图片放进仓库的 `docs/` 文件夹（命名为 `wechat.png` / `alipay.png`）后，下面就会显示出来。
+
+| 微信 | 支付宝 |
+|------|--------|
+| ![微信收款码](docs/wechat.png) | ![支付宝收款码](docs/alipay.png) |
+
+或在 [爱发电](https://afdian.com/a/你的ID) 支持（把链接换成你的主页）。
+
+**海外 / Overseas**
+
+[Ko-fi](https://ko-fi.com/你的ID) · [Buy Me a Coffee](https://buymeacoffee.com/你的ID)
 
 ## 许可
 
