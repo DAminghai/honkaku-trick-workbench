@@ -79,14 +79,6 @@ python -m http.server 8000
 
 原生 HTML / CSS / JavaScript 单页应用，无构建步骤、无框架；图谱可视化使用 vis-network。
 
-## 支持作者 / Sponsor
-
-工具所有功能永久免费、无广告、无追踪。如果它帮到了你，欢迎请作者喝杯咖啡 ☕（感恩家银）。
-
-
-[爱发电](https://afdian.com/a/DAminghai) 支持
-
-
 
 ## 许可
 
